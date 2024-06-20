@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+<form id="CreateForm" method="post">
+    <div class="form-group">
+        <label for="CategoryName">Name</label>
+        <input type="text" class="form-control" name="Name" id="CategoryName" placeholder="Enter Name">
+    </div>
+    <div class="form-group">
+        <label for="CategoryDesc">Description</label>
+        <input type="text" class="form-control" name="Description" id="CategoryDesc" placeholder="Enter Description">
+    </div>
+    <button type="button" class="btn rr-primary-btn" id="createSubmit" >Create</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#createSubmit").click(function () {
+            var obj = $("#CreateForm").serialize();
+            $.ajax({
+                url: '/Category/Create',
+                method: 'POST',
+                data: obj,
+                success: function (response) {
+                    $("#table_container").html(response)
+                    $("#CreateForm")[0].reset();
+                },
+                fail: function (err) {
+                    alert(err)
+                }
+            });
+        });
+
+    });
+</script>

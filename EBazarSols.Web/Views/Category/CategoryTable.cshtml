@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Category>
+@{
+    ViewBag.Title = "Category Table";
+}
+
+<h2>CategoryTable</h2>
+
+<button class="rr-primary-btn"type="button" id="CreateNew">Create</button>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">@item.Name</td>
+                <td>@item.Description</td>
+                <td>
+                    <button class="btn rr-primary-btn editbtn"  type="button" data-id="@item.Id">Edit</button>
+                    <button class="btn rr-primary-btn delbtn"  type="button" data-id="@item.Id">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $("#CreateNew").click(function () {
+            $.ajax({
+                url: '/Category/Create',
+                method: 'GET',
+                success: function (response) {
+                    $("#action_container").html(response)
+                },
+                fail: function (err) {
+                    alert(err)
+                }
+            });
+        });
+
+        $(".editbtn").click(function () {
+            var id=$(this).attr('data-id')
+            var obj = {
+                Id:id
+            }
+            $.ajax({
+                url: '/Category/Edit',
+                method: 'GET',
+                data:obj,
+                success: function (response) {
+                    $("#action_container").html(response)
+                },
+                fail: function (err) {
+                    alert(err)
+                }
+            });
+        });
+
+        $(".delbtn").click(function () {
+            $("#CreateForm").hide();
+            $("#EditForm").hide();
+            var id = $(this).attr('data-id')
+            var obj = {
+                Id: id
+            }
+            console.log(obj)
+            $(".modal").show();
+            $("#yesbtn").click(function () {
+                $.ajax({
+                    url: '/Category/Delete',
+                    method: 'POST',
+                    data: obj,
+                    success: function (response) {
+                        $("#table_container").html(response)
+                        $(".modal").hide();
+                    },
+                    fail: function (err) {
+                        alert(err)
+                    }
+                });
+            });
+            $("#nobtn").click(function () {
+                $.ajax({
+                    url: '/Category/CategoryTable',
+                    method: 'GET',
+                    success: function (response) {
+                        $("#table_container").html(response)
+                        $(".modal").hide();
+                    },
+                    fail: function (err) {
+                        alert(err)
+                    }
+                });
+            });
+        });
+
+    });
+</script>

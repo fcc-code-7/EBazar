@@ -1,0 +1,52 @@
+﻿@*@model Product
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Product-Edit</h2>
+<form id="CreateForm" method="post">
+    <div class="form-group">
+        <label for="ProName">Name</label>
+        <input type="text" class="form-control" name="Name" id="ProName" value="@Model.Name">
+    </div>
+    <div class="form-group">
+        <label for="ProDesc">Description</label>
+        <input type="text" class="form-control" name="Description" id="ProDesc" value="@Model.Description">
+    </div>
+    <div class="form-group">
+        <label for="ProPrice">Price</label>
+        <input type="text" class="form-control" name="Price" id="ProPrice" value="@Model.Price">
+    </div>
+    <div class="form-group">
+        <label for="ProDropDown">Category</label>
+        <select class="form-select form-control" id="ProDropDown" name="CategoryId" value="@Model.CategoryId">
+            @foreach (var Category in Model)
+            {
+                <option value="@Category.Id">@Category.Name</option>
+            }
+        </select>
+    </div>
+    <button type="button" class="btn btn-primary" id="createSubmit">Create</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#createSubmit").click(function () {
+            var obj = $("#CreateForm").serialize();
+            console.log(obj);
+            $.ajax({
+                url: '/Product/Create',
+                method: 'POST',
+                data: obj,
+                success: function (response) {
+                    $("#table_container").html(response)
+                    $("#CreateForm")[0].reset();
+                },
+                fail: function (err) {
+                    alert(err)
+                }
+            });
+        });
+
+    });
+</script>*@
